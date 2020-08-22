@@ -5,6 +5,9 @@ import Element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css';
 import './static/css/main.css'
 import store from './store'
+import axios from 'axios'
+
+Vue.prototype.$http = axios;
 
 Vue.use(Element)
 

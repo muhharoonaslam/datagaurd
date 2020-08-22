@@ -78,6 +78,7 @@
   export default {
     data() {
       return {
+        value2:false,
         image: require('../static/images/DataGuard.png'),
       }
     },
