@@ -2,13 +2,14 @@
     <el-row type="flex" align="stretch" :gutter="20" >
     <template v-for="(plugin,key) in plugins">
         <el-col :xs="24" :sm="24" :md="8" :lg="8"  :key="key">
-                <el-card shadow="hover" class="box-card" aria-disabled="">
+                <el-card shadow="hover" :class="checkdisabled(plugin.title) ?'box-card disabled' :'box-card '" aria-disabled="">
                     <div >
-                        <span>{{plugin.title}} </span>
+                        <span :class="checkdisabled(plugin.title) ? 'disabled ':''">{{plugin.title}} </span>
                         <el-switch class="right"
                         v-model="plugin.enabled"
                         active-color="#5BC88D"
                         inactive-color="#C63040"
+                        :disabled="checkdisabled(plugin.title)"
                         @change="chnagStatus(plugin)">
                         </el-switch>
                         <div class="flex-end">
@@ -17,7 +18,7 @@
                     </div>
                     <el-row :gutter="12">
                         <el-col :span="19">
-                            <p class="text">{{plugin.description}}</p>
+                            <p :class="checkdisabled(plugin.title) ? 'disabled text':'text'">{{plugin.description}}</p>
                         </el-col>
                     </el-row>
                 </el-card>
@@ -33,16 +34,23 @@ import genMix from '../genericMixin.js'
 
   export default {
     mixins: [genMix.InitializeMixin],
+    props:{
+        disabledItem: {  type: Object, default: () => { return {} } },
+    },
     data() {
       return {
           plugins:null,
       }
     },
     mounted:async function(){
-        this.plugins = (await this.request('plugins', null, null))
-         console.log(this.plugins )
+        var plugins = (await this.request('plugins', null, null))
+        this.plugins = plugins
+        this.$store.dispatch('setState', {  payload:  [...plugins]  })
     },
     methods:{
+        checkdisabled(title){ 
+           return this.disabledItem.disabled.includes(title) 
+        },
         chnagStatus :async function(body){
             var id = body.id
             var res =(await this.request(`plugins/${id}`, 'put',null, body))
@@ -51,7 +59,8 @@ import genMix from '../genericMixin.js'
     }
   };
 </script>
-<style scoped>
+<style >
+
     .el-col {
         margin-bottom: 20px;
     }
@@ -60,6 +69,13 @@ import genMix from '../genericMixin.js'
     }
     .el-card{
         border-radius: 8px;
+        height: 100%;
+    }
+    .disabled{
+        color: #9AA7B0 !important;
+    }
+    .el-card.disabled{
+        border-color: #DCDCDC;
         height: 100%;
     }
     .el-card__body{

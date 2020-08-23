@@ -8,7 +8,7 @@ const routes = [
       children: [
         { name:'finance', path: '/finance', component: () => import('../pages/finance.vue'), meta: { requiresAuth: false } },
         { name:'marketing', path: '/marketing', component: () => import('../pages/marketing.vue'), meta: { requiresAuth: false } },
-        { name:'personal', path: '/personal', component: () => import('../pages/personal.vue'), meta: { requiresAuth: false } },
+        { name:'personnel', path: '/personnel', component: () => import('../pages/personnel.vue'), meta: { requiresAuth: false } },
       ]
     }
   ]

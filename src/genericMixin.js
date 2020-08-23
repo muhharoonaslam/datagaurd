@@ -7,7 +7,7 @@ const lib = {
         queryRest: async function (url, method = 'get', params = null, data = null) {
             var headers = { 'Content-Type': 'application/json' }
             var toSend = {
-                baseURL: 'http://localhost:3000/', 
+                baseURL: 'https://whispering-crag-07172.herokuapp.com/', 
                 url: url,
                 method: method,
                 params: params,

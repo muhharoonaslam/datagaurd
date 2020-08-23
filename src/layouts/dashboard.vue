@@ -4,24 +4,24 @@
       <span>
         <img :src="image" class="logo" />
         <el-menu
-        default-active="1"
+        :default-active="$route.name"
         class="el-menu-vertical-demo"
         text-color="#000000"
         active-text-color="#000000"
         background-color="#F1F1F1"
         :router="true"
         >
-        <el-menu-item index="1" :route="{path:'/marketing'}">
+        <el-menu-item index="marketing" :route="{path:'/marketing'}">
             <i class="el-icon-s-grid"></i>
             <span>Marketing</span>
         </el-menu-item>
-        <el-menu-item index="2" :route="{path:'/finance'}">
-            <i class="el-icon-document"></i>
+        <el-menu-item index="finance" :route="{path:'/finance'}">
+            <i class="el-icon-s-marketing"></i>
             <span>Finance</span>
         </el-menu-item>
-        <el-menu-item index="3" :route="{path:'/personal'}">
-            <i class="el-icon-setting"></i>
-            <span>Personal</span>
+        <el-menu-item index="personnel" :route="{path:'/personnel'}">
+            <i class="el-icon-s-custom"></i>
+            <span>Personnel</span>
         </el-menu-item>
         </el-menu>
 
@@ -29,7 +29,8 @@
         <div class="all-plugins">
           <span >All plugins enabled</span>
           <el-switch class="right"
-              v-model="value2"
+              v-model="value"
+              @change="disable($route.name)"
               active-color="#5BC88D"
               inactive-color="#C63040">
           </el-switch>
@@ -39,7 +40,7 @@
     
     <el-container>
         <el-main>
-        <router-view></router-view>
+              <router-view></router-view>
         </el-main>
     </el-container>
     </el-container>
@@ -78,11 +79,53 @@
   export default {
     data() {
       return {
-        value2:false,
+        allPlugin:null,
+        tabs:[
+          {
+            "title": "marketing",
+            "icon": "el-icon-s-grid",
+            "active": ["plugin1", "plugin2", "plugin4"],
+            "disabled": ["plugin3"],
+            "inactive": ["plugin5", "plugin6"]
+          },
+          {
+            "title": "finance",
+            "icon": "el-icon-document",
+            "active": ["plugin7", "plugin8"],
+            "disabled": ["plugin9"],
+            "inactive": ["plugin10"]
+          },
+          {
+            "title": "personnel",
+            "icon": "el-icon-setting",
+            "active": ["plugin11"],
+            "disabled": ["plugin12"],
+            "inactive": ["plugin13"]
+          }
+        ],
+        value:true,
         image: require('../static/images/DataGuard.png'),
       }
     },
-    method:{
+    mounted(){
+
+    },
+    methods:{
+      disable(route){
+        var res = this.$store.state.plugins.map(tabs => { return tabs.title  })
+        console.log('tabs',res)
+        var findTab = this.tabs.find(tabs => {
+          return tabs.title == route;
+        })
+        if(this.value){
+          findTab.disabled = []
+        } else{
+          findTab.disabled = res
+        }
+        var tabs = this.tabs
+        this.$store.dispatch('setStateTabs', {  payload:  [...tabs] })
+        
+      }
     }
   };
 </script>
